@@ -78,7 +78,7 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id:int}", Name = "DeleteVilla")]
+        [HttpDelete("{id:int}", Name = "DeleteHospital")]
 
         public ActionResult DeleteHospital(int id)
         {
@@ -88,6 +88,17 @@ namespace Hospital_API.Controllers
             }
             var hospital = _context.Hospitals.FirstOrDefault(u => u.HospitalId == id);
             if (hospital == null) return NotFound();
+
+
+            //Remove all departments which are linked to the hospital
+            List<Department> departments = _context.Departments.Where(u=>u.HospitalId==id).ToList();
+            foreach (var department in departments)
+            {
+                //Delete more stuff which is connected
+
+                _context.Departments.Remove(department);
+                _context.SaveChanges();
+            }
 
             _context.Hospitals.Remove(hospital);
             _context.SaveChanges();
