@@ -1,9 +1,10 @@
-﻿using Hospital_API.Dto;
+﻿
+using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_API.Controllers
 {
-    [Route("api/Department")]
+    [Route("api/DepartmentAPI")]
     [ApiController]
     public class DepartmentAPIController: ControllerBase
     {
@@ -69,7 +70,7 @@ namespace Hospital_API.Controllers
 
             _context.Departments.Add(department);
             _context.SaveChanges();
-            return CreatedAtRoute("GetDepartment", new { id = departmentDTO.Id }, departmentDTO);
+            return CreatedAtRoute("GetDoctor", new { id = departmentDTO.Id }, departmentDTO);
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -95,7 +96,7 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult UpdateHospital(int id, [FromBody] DepartmentDTO departmentDTO)
+        public IActionResult UpdateDepartment(int id, [FromBody] DepartmentDTO departmentDTO)
         {
             if (departmentDTO == null || id != departmentDTO.Id)
             {
@@ -110,5 +111,7 @@ namespace Hospital_API.Controllers
             _context.SaveChanges();
             return NoContent();
         }
+
+      
     }
 }

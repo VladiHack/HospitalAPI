@@ -1,10 +1,11 @@
 ﻿
 using Hospital_API.Dto;
+using Hospital_API.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_API.Controllers
 {
-    [Route("api/Hospital")]
+    [Route("api/HospitalAPI")]
     [ApiController]
     public class HospitalAPIController:ControllerBase
     {
@@ -127,5 +128,6 @@ namespace Hospital_API.Controllers
             return NoContent();
         }
 
+       
     }
 }
