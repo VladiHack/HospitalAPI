@@ -2,7 +2,7 @@
 
 namespace Hospital_API.Dto
 {
-    public class DepartmentDTO
+    public class DepartmentDTO 
     {
         public int Id { get; set; }
         [Required]

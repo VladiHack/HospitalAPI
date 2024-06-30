@@ -1,4 +1,5 @@
-﻿using Hospital_API.Dto;
+﻿using AutoMapper;
+using Hospital_API.Dto;
 using Hospital_API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace Hospital_API.Controllers
     public class HospitalAPIController : ControllerBase
     {
         private readonly HospitalDbContext _context;
+        private readonly IMapper _mapper;
 
-        public HospitalAPIController(HospitalDbContext context)
+        public HospitalAPIController(HospitalDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -61,14 +64,8 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Hospital hospital = new Hospital
-            {
-                HospitalName = hospitalDTO.Name,
-                HospitalPhoneNumber = hospitalDTO.PhoneNumber,
-                HospitalAddress = hospitalDTO.Address,
-                State = hospitalDTO.State
-            };
-
+            var hospital = _mapper.Map<Hospital>(hospitalDTO);
+         
             _context.Hospitals.Add(hospital);
             await _context.SaveChangesAsync();
             return CreatedAtRoute("GetHospital", new { id = hospitalDTO.Id }, hospitalDTO);
@@ -136,16 +133,11 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            var hospital = await _context.Hospitals.FirstOrDefaultAsync(u => u.HospitalId == id);
+            var hospital = _mapper.Map<Hospital>(hospitalDTO);
             if (hospital == null)
             {
                 return NotFound();
             }
-
-            hospital.HospitalName = hospitalDTO.Name;
-            hospital.HospitalPhoneNumber = hospitalDTO.PhoneNumber;
-            hospital.HospitalAddress = hospitalDTO.Address;
-            hospital.State = hospitalDTO.State;
 
             _context.Hospitals.Update(hospital);
             await _context.SaveChangesAsync();
