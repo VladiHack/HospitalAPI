@@ -1,4 +1,5 @@
-﻿using Hospital_API.Dto;
+﻿using AutoMapper;
+using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace Hospital_API.Controllers
     public class StaffAPIController : ControllerBase
     {
         private readonly HospitalDbContext _context;
+        private readonly IMapper _mapper;
 
-        public StaffAPIController(HospitalDbContext context)
+        public StaffAPIController(HospitalDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -60,14 +63,7 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Staff staffMember = new Staff
-            {
-                StaffFirstName = staffDTO.FirstName,
-                StaffLastName = staffDTO.LastName,
-                DepartmentId = staffDTO.DepartmentId,
-                StaffPhoneNumber = staffDTO.PhoneNumber,
-                StaffAddress = staffDTO.Address
-            };
+            var staffMember = _mapper.Map<Staff>(staffDTO);
 
             _context.Staff.Add(staffMember);
             await _context.SaveChangesAsync();
@@ -105,17 +101,11 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            var staffMember = await _context.Staff.FirstOrDefaultAsync(u => u.StaffId == id);
+            var staffMember = _mapper.Map<Staff>(staffDTO);
             if (staffMember == null)
             {
                 return NotFound();
             }
-
-            staffMember.StaffFirstName = staffDTO.FirstName;
-            staffMember.StaffLastName = staffDTO.LastName;
-            staffMember.DepartmentId = staffDTO.DepartmentId;
-            staffMember.StaffPhoneNumber = staffDTO.PhoneNumber;
-            staffMember.StaffAddress = staffDTO.Address;
 
             _context.Staff.Update(staffMember);
             await _context.SaveChangesAsync();

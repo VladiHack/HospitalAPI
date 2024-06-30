@@ -1,4 +1,5 @@
-﻿using Hospital_API.Dto;
+﻿using AutoMapper;
+using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace Hospital_API.Controllers
     public class AppointmentAPIController : ControllerBase
     {
         private readonly HospitalDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AppointmentAPIController(HospitalDbContext context)
+        public AppointmentAPIController(HospitalDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -79,15 +82,8 @@ namespace Hospital_API.Controllers
             }
 
             // Create a new Appointment entity from the AppointmentDTO
-            var appointment = new Appointment
-            {
-                PatientId = appointmentDTO.PatientId,
-                DoctorId = appointmentDTO.DoctorId,
-                Date = DateOnly.Parse(appointmentDTO.Date),
-                Patient = patient,
-                Doctor = doctor
-            };
-
+            var appointment = _mapper.Map<Appointment>(appointmentDTO);
+        
             // Add the new appointment to the database
             await _context.Appointments.AddAsync(appointment);
             await _context.SaveChangesAsync();
@@ -129,7 +125,7 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
+            var appointment = _mapper.Map<Appointment>(appointmentDTO);
             if (appointment == null)
             {
                 return NotFound();
@@ -150,10 +146,6 @@ namespace Hospital_API.Controllers
                 ModelState.AddModelError("DoctorId", "Invalid doctor ID.");
                 return BadRequest(ModelState);
             }
-
-            appointment.Date = DateOnly.Parse(appointmentDTO.Date);
-            appointment.Patient = patient;
-            appointment.Doctor = doctor;
 
             _context.Appointments.Update(appointment);
             await _context.SaveChangesAsync();

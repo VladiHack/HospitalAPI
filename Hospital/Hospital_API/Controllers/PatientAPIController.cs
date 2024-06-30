@@ -1,4 +1,5 @@
-﻿using Hospital_API.Dto;
+﻿using AutoMapper;
+using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace Hospital_API.Controllers
     public class PatientAPIController : ControllerBase
     {
         private readonly HospitalDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PatientAPIController(HospitalDbContext context)
+        public PatientAPIController(HospitalDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -60,13 +63,7 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Patient patient = new Patient
-            {
-                PatientFirstName = patientDTO.FirstName,
-                PatientLastName = patientDTO.LastName,
-                PatientAddress = patientDTO.Address,
-                PatientPhoneNumber = patientDTO.PhoneNumber
-            };
+            var patient = _mapper.Map<Patient>(patientDTO);
 
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
@@ -112,12 +109,7 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            Patient patient = await _context.Patients.FirstOrDefaultAsync(u => u.PatientId == id);
-
-            patient.PatientFirstName = patientDTO.FirstName;
-            patient.PatientLastName = patientDTO.LastName;
-            patient.PatientAddress = patientDTO.Address;
-            patient.PatientPhoneNumber = patientDTO.PhoneNumber;
+            var patient = _mapper.Map<Patient>(patientDTO);
 
             _context.Patients.Update(patient);
             await _context.SaveChangesAsync();
