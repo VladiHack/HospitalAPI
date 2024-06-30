@@ -1,7 +1,8 @@
-﻿using AutoMapper;
-using Hospital_API.Dto;
+﻿using Hospital_API.Dto;
+using Hospital_API.Services.Appointments;
+using Hospital_API.Services.Doctors;
+using Hospital_API.Services.Patients;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
@@ -9,20 +10,22 @@ namespace Hospital_API.Controllers
     [ApiController]
     public class AppointmentAPIController : ControllerBase
     {
-        private readonly HospitalDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IDoctorService _doctorService;
+        private readonly IPatientService _patientService;
 
-        public AppointmentAPIController(HospitalDbContext context, IMapper mapper)
+        public AppointmentAPIController(IAppointmentService appointmentService, IDoctorService doctorService, IPatientService patientService)
         {
-            _context = context;
-            _mapper = mapper;
+            _appointmentService = appointmentService;
+            _doctorService = doctorService;
+            _patientService = patientService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsAsync()
         {
-            return Ok(await _context.Appointments.ToListAsync());
+            return Ok(await _appointmentService.GetAppointmentsAsync());
         }
 
         [HttpGet("{patientId:int}, {doctorId:int}", Name = "GetAppointment")]
@@ -35,11 +38,14 @@ namespace Hospital_API.Controllers
             {
                 return BadRequest();
             }
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(u => u.DoctorId == doctorId && u.PatientId == patientId);
-            if (appointment == null)
+
+            if (!await _appointmentService.ExistsByPatientAndDoctorIdAsync(patientId, doctorId))
             {
                 return NotFound();
             }
+
+            var appointment = await _appointmentService.GetAppointmentByPatientAndDoctorIdAsync(patientId, doctorId);
+           
             return Ok(appointment);
         }
 
@@ -54,39 +60,25 @@ namespace Hospital_API.Controllers
                 return BadRequest(appointmentDTO);
             }
 
-            // Check if an appointment with the same patient, doctor, and date already exists
-            var existingAppointment = await _context.Appointments.FirstOrDefaultAsync(a =>
-                a.PatientId == appointmentDTO.PatientId &&
-                a.DoctorId == appointmentDTO.DoctorId);
-
-            if (existingAppointment != null)
+            if (await _appointmentService.ExistsByPatientAndDoctorIdAsync(appointmentDTO.PatientId,appointmentDTO.DoctorId))
             {
                 ModelState.AddModelError("CustomError", "Appointment already exists!");
                 return BadRequest(ModelState);
             }
 
-            // Fetch the Patient and Doctor entities
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.PatientId == appointmentDTO.PatientId);
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.DoctorId == appointmentDTO.DoctorId);
-
-            if (patient == null)
+            if (!await _patientService.ExistsByIdAsync(appointmentDTO.PatientId))
             {
                 ModelState.AddModelError("PatientId", "Invalid patient ID.");
                 return BadRequest(ModelState);
             }
 
-            if (doctor == null)
+            if (!await _doctorService.ExistsByIdAsync(appointmentDTO.DoctorId))
             {
                 ModelState.AddModelError("DoctorId", "Invalid doctor ID.");
                 return BadRequest(ModelState);
             }
 
-            // Create a new Appointment entity from the AppointmentDTO
-            var appointment = _mapper.Map<Appointment>(appointmentDTO);
-        
-            // Add the new appointment to the database
-            await _context.Appointments.AddAsync(appointment);
-            await _context.SaveChangesAsync();
+            await _appointmentService.CreateAppointmentAsync(appointmentDTO);
 
             // Return the created appointment as an AppointmentDTO
             return CreatedAtRoute("GetAppointment", new { patientId = appointmentDTO.PatientId, doctorId = appointmentDTO.DoctorId }, appointmentDTO);
@@ -103,15 +95,13 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
-            if (appointment == null)
+            if (!await _appointmentService.ExistsByPatientAndDoctorIdAsync(patientId, doctorId))
             {
                 return NotFound();
             }
 
-            _context.Appointments.Remove(appointment);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            await _appointmentService.DeleteAppointmentByPatientAndDoctorIdAsync(patientId, doctorId);
+            return Ok("Successfully deleted appointment.");
         }
 
         [HttpPut("{patientId},{doctorId}", Name = "UpdateAppointment")]
@@ -125,31 +115,25 @@ namespace Hospital_API.Controllers
                 return BadRequest();
             }
 
-            var appointment = _mapper.Map<Appointment>(appointmentDTO);
-            if (appointment == null)
+            if (!await _appointmentService.ExistsByPatientAndDoctorIdAsync(patientId, doctorId))
             {
                 return NotFound();
             }
 
-            // Fetch the Patient and Doctor entities
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.PatientId == appointmentDTO.PatientId);
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.DoctorId == appointmentDTO.DoctorId);
-
-            if (patient == null)
+            if (!await _patientService.ExistsByIdAsync(appointmentDTO.PatientId))
             {
                 ModelState.AddModelError("PatientId", "Invalid patient ID.");
                 return BadRequest(ModelState);
             }
 
-            if (doctor == null)
+            if (!await _doctorService.ExistsByIdAsync(appointmentDTO.DoctorId))
             {
                 ModelState.AddModelError("DoctorId", "Invalid doctor ID.");
                 return BadRequest(ModelState);
             }
 
-            _context.Appointments.Update(appointment);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            await _appointmentService.EditAppointmentAsync(appointmentDTO);
+            return Ok("Successfully edited appointment.");
         }
     }
 }
