@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\hospitalapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\hospitalapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\appointmentapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\appointmentapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\departmentapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\departmentapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\doctorapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\doctorapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\staffapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,8 +23,16 @@
       "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\patientapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\doctorapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\doctorapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\controllers\\hospitalapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\controllers\\hospitalapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\hospital_api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|solutionrelative:hospital_api\\hospital_api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{104DC021-0F63-4487-B736-A9DB47E4A655}|Hospital_API\\Hospital_API.csproj|c:\\users\\vladimir boychev\\desktop\\hospital api\\hospitalapi\\hospital\\hospital_api\\dto\\appointmentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -90,7 +98,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -102,13 +110,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "DoctorAPIController.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\DoctorAPIController.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\DoctorAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\DoctorAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\DoctorAPIController.cs",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAAAGEAAAAAAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAH4AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-29T10:12:44.783Z",
               "EditorCaption": ""
@@ -121,7 +129,7 @@
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\PatientAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\PatientAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\PatientAPIController.cs",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAAAF4AAAAnAAAA",
+              "ViewState": "AQIAABMAAAAAAAAAAAAAAH4AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-29T16:33:23.883Z",
               "EditorCaption": ""
@@ -134,53 +142,78 @@
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\StaffAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\StaffAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\StaffAPIController.cs",
-              "ViewState": "AQIAAFIAAAAAAAAAAAAAAHMAAAAaAAAA",
+              "ViewState": "AQIAAEkAAAAAAAAAAAAAAHwAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-30T04:17:00.227Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "HospitalAPIController.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\HospitalAPIController.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\HospitalAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\HospitalAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\HospitalAPIController.cs",
-              "ViewState": "AQIAAIsAAAAAAAAAAAAAAAEAAAAXAAAA",
+              "ViewState": "AQIAAFkAAAAAAAAAAAAAAJoAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-28T13:59:56.407Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "DepartmentAPIController.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\DepartmentAPIController.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\DepartmentAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\DepartmentAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\DepartmentAPIController.cs",
-              "ViewState": "AQIAAFkAAAAAAAAAAADwv2oAAAAnAAAA",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAAAIoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-29T09:40:12.774Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "AppointmentAPIController.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\AppointmentAPIController.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Controllers\\AppointmentAPIController.cs",
               "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Controllers\\AppointmentAPIController.cs",
               "RelativeToolTip": "Hospital_API\\Controllers\\AppointmentAPIController.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAQAAAABAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAKIAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-30T06:31:42.884Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\appsettings.json",
+              "RelativeDocumentMoniker": "Hospital_API\\appsettings.json",
+              "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\appsettings.json",
+              "RelativeToolTip": "Hospital_API\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-30T09:43:39.768Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Hospital_API.http",
+              "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Hospital_API.http",
+              "RelativeDocumentMoniker": "Hospital_API\\Hospital_API.http",
+              "ToolTip": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Hospital_API.http",
+              "RelativeToolTip": "Hospital_API\\Hospital_API.http",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2024-06-30T09:43:35.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "Appointment.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Appointment.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Appointment.cs",
@@ -192,7 +225,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Program.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Program.cs",
@@ -204,7 +237,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "AppointmentDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\AppointmentDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\AppointmentDTO.cs",
@@ -212,12 +245,11 @@
               "RelativeToolTip": "Hospital_API\\Dto\\AppointmentDTO.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T06:30:21.746Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-30T06:30:21.746Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "DepartmentDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\DepartmentDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\DepartmentDTO.cs",
@@ -229,7 +261,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "Hospital.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Hospital.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Hospital.cs",
@@ -241,7 +273,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "StaffDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\StaffDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\StaffDTO.cs",
@@ -253,7 +285,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "HospitalDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\HospitalDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\HospitalDTO.cs",
@@ -265,7 +297,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "PatientDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\PatientDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\PatientDTO.cs",
@@ -277,7 +309,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "HospitalDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\HospitalDbContext.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\HospitalDbContext.cs",
@@ -289,7 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "Patient.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Patient.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Patient.cs",
@@ -301,7 +333,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "Staff.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Staff.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Staff.cs",
@@ -313,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "Doctor.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Doctor.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Doctor.cs",
@@ -325,7 +357,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "Department.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Model\\Department.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Model\\Department.cs",
@@ -337,7 +369,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "DoctorDTO.cs",
               "DocumentMoniker": "C:\\Users\\Vladimir Boychev\\Desktop\\Hospital API\\HospitalAPI\\Hospital\\Hospital_API\\Dto\\DoctorDTO.cs",
               "RelativeDocumentMoniker": "Hospital_API\\Dto\\DoctorDTO.cs",

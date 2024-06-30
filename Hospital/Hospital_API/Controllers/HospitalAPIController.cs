@@ -1,15 +1,15 @@
-﻿
-using Hospital_API.Dto;
+﻿using Hospital_API.Dto;
 using Hospital_API.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
     [Route("api/HospitalAPI")]
     [ApiController]
-    public class HospitalAPIController:ControllerBase
+    public class HospitalAPIController : ControllerBase
     {
-        public HospitalDbContext _context;
+        private readonly HospitalDbContext _context;
 
         public HospitalAPIController(HospitalDbContext context)
         {
@@ -18,25 +18,23 @@ namespace Hospital_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Hospital>> GetHospitals()
-        { 
-            return Ok(_context.Hospitals.ToList()); 
+        public async Task<ActionResult<IEnumerable<Hospital>>> GetHospitalsAsync()
+        {
+            return Ok(await _context.Hospitals.ToListAsync());
         }
 
-
-        [HttpGet("{id:int}",Name="GetHospital")]
+        [HttpGet("{id:int}", Name = "GetHospital")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<Hospital> GetHospital(int id)
+        public async Task<ActionResult<Hospital>> GetHospitalAsync(int id)
         {
-            if(id<0)
+            if (id < 0)
             {
                 return BadRequest();
             }
-            var hospital = _context.Hospitals.FirstOrDefault(u => u.HospitalId == id);
-            if(hospital==null)
+            var hospital = await _context.Hospitals.FirstOrDefaultAsync(u => u.HospitalId == id);
+            if (hospital == null)
             {
                 return NotFound();
             }
@@ -47,108 +45,111 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Hospital> CreateHospital([FromBody] HospitalDTO hospitalDTO)
+        public async Task<ActionResult<Hospital>> CreateHospitalAsync([FromBody] HospitalDTO hospitalDTO)
         {
-            if (_context.Hospitals.FirstOrDefault(u => u.HospitalName.ToLower() == hospitalDTO.Name.ToLower())!=null)
+            if (await _context.Hospitals.AnyAsync(u => u.HospitalName.ToLower() == hospitalDTO.Name.ToLower()))
             {
                 ModelState.AddModelError("CustomError", "Hospital already exists!");
                 return BadRequest(ModelState);
             }
-            if(hospitalDTO==null)
+            if (hospitalDTO == null)
             {
                 return BadRequest(hospitalDTO);
             }
-            if(hospitalDTO.Id>0)
+            if (hospitalDTO.Id > 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Hospital hospital=new Hospital();
-
-            hospital.HospitalName=hospitalDTO.Name;
-            hospital.HospitalPhoneNumber=hospitalDTO.PhoneNumber;
-            hospital.HospitalAddress=hospitalDTO.Address;
-            hospital.State = hospitalDTO.State;
+            Hospital hospital = new Hospital
+            {
+                HospitalName = hospitalDTO.Name,
+                HospitalPhoneNumber = hospitalDTO.PhoneNumber,
+                HospitalAddress = hospitalDTO.Address,
+                State = hospitalDTO.State
+            };
 
             _context.Hospitals.Add(hospital);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return CreatedAtRoute("GetHospital", new { id = hospitalDTO.Id }, hospitalDTO);
         }
 
+        [HttpDelete("{id:int}", Name = "DeleteHospital")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id:int}", Name = "DeleteHospital")]
-
-        public ActionResult DeleteHospital(int id)
+        public async Task<IActionResult> DeleteHospitalAsync(int id)
         {
-            if(id<0)
+            if (id < 0)
             {
                 return BadRequest();
             }
-            var hospital = _context.Hospitals.FirstOrDefault(u => u.HospitalId == id);
-            if (hospital == null) return NotFound();
+            var hospital = await _context.Hospitals.FirstOrDefaultAsync(u => u.HospitalId == id);
+            if (hospital == null)
+            {
+                return NotFound();
+            }
 
-
-            //Remove all departments which are linked to the hospital
-            List<Department> departments = _context.Departments.Where(u=>u.HospitalId==id).ToList();
+            // Remove all departments which are linked to the hospital
+            var departments = await _context.Departments.Where(u => u.HospitalId == id).ToListAsync();
             foreach (var department in departments)
             {
-                //Delete all doctors and staff in this department
-                List<Doctor> doctors=_context.Doctors.Where(u=>u.DepartmentId==department.DepartmentId).ToList();
-                foreach(Doctor doctor in doctors)
+                // Delete all doctors and staff in this department
+                var doctors = await _context.Doctors.Where(u => u.DepartmentId == department.DepartmentId).ToListAsync();
+                foreach (var doctor in doctors)
                 {
-                    //Delete all appointments of the doctor
-                    List<Appointment> appointments = _context.Appointments.Where(a => a.DoctorId == doctor.DoctorId).ToList();
-                    foreach(Appointment appointment in appointments)
+                    // Delete all appointments of the doctor
+                    var appointments = await _context.Appointments.Where(a => a.DoctorId == doctor.DoctorId).ToListAsync();
+                    foreach (var appointment in appointments)
                     {
                         _context.Appointments.Remove(appointment);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                     }
 
                     _context.Doctors.Remove(doctor);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
-                List<Staff> staff = _context.Staff.Where(u => u.DepartmentId == department.DepartmentId).ToList();
-                foreach(Staff staffMember in staff)
+                var staff = await _context.Staff.Where(u => u.DepartmentId == department.DepartmentId).ToListAsync();
+                foreach (var staffMember in staff)
                 {
                     _context.Staff.Remove(staffMember);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
                 _context.Departments.Remove(department);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             _context.Hospitals.Remove(hospital);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPut("{id:int}", Name = "UpdateHospital")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public IActionResult UpdateHospital(int id, [FromBody] HospitalDTO hospitalDTO)
+        public async Task<IActionResult> UpdateHospitalAsync(int id, [FromBody] HospitalDTO hospitalDTO)
         {
             if (hospitalDTO == null || id != hospitalDTO.Id)
             {
                 return BadRequest();
             }
 
-            Hospital hospital=_context.Hospitals.FirstOrDefault(u=>u.HospitalId == id);
+            var hospital = await _context.Hospitals.FirstOrDefaultAsync(u => u.HospitalId == id);
+            if (hospital == null)
+            {
+                return NotFound();
+            }
+
             hospital.HospitalName = hospitalDTO.Name;
             hospital.HospitalPhoneNumber = hospitalDTO.PhoneNumber;
-            hospital.HospitalAddress= hospitalDTO.Address;
-            hospital.State= hospitalDTO.State;  
+            hospital.HospitalAddress = hospitalDTO.Address;
+            hospital.State = hospitalDTO.State;
 
             _context.Hospitals.Update(hospital);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
-
-       
     }
 }

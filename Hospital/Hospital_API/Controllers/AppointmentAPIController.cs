@@ -1,5 +1,6 @@
 ﻿using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
@@ -7,7 +8,7 @@ namespace Hospital_API.Controllers
     [ApiController]
     public class AppointmentAPIController : ControllerBase
     {
-        public HospitalDbContext _context;
+        private readonly HospitalDbContext _context;
 
         public AppointmentAPIController(HospitalDbContext context)
         {
@@ -16,24 +17,22 @@ namespace Hospital_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Appointment>> GetAppointments()
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsAsync()
         {
-            return Ok(_context.Appointments.ToList());
+            return Ok(await _context.Appointments.ToListAsync());
         }
-
 
         [HttpGet("{patientId:int}, {doctorId:int}", Name = "GetAppointment")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<Appointment> GetAppointment(int patientId, int doctorId)
+        public async Task<ActionResult<Appointment>> GetAppointmentAsync(int patientId, int doctorId)
         {
             if (patientId < 0 || doctorId < 0)
             {
                 return BadRequest();
             }
-            var appointment = _context.Appointments.FirstOrDefault(u => u.DoctorId == doctorId && u.PatientId == patientId);
+            var appointment = await _context.Appointments.FirstOrDefaultAsync(u => u.DoctorId == doctorId && u.PatientId == patientId);
             if (appointment == null)
             {
                 return NotFound();
@@ -45,12 +44,7 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<AppointmentDTO> CreateAppointment([FromBody] AppointmentDTO appointmentDTO)
+        public async Task<ActionResult<AppointmentDTO>> CreateAppointmentAsync([FromBody] AppointmentDTO appointmentDTO)
         {
             if (appointmentDTO == null)
             {
@@ -58,7 +52,7 @@ namespace Hospital_API.Controllers
             }
 
             // Check if an appointment with the same patient, doctor, and date already exists
-            var existingAppointment = _context.Appointments.FirstOrDefault(a =>
+            var existingAppointment = await _context.Appointments.FirstOrDefaultAsync(a =>
                 a.PatientId == appointmentDTO.PatientId &&
                 a.DoctorId == appointmentDTO.DoctorId);
 
@@ -69,8 +63,8 @@ namespace Hospital_API.Controllers
             }
 
             // Fetch the Patient and Doctor entities
-            var patient = _context.Patients.FirstOrDefault(p => p.PatientId == appointmentDTO.PatientId);
-            var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorId == appointmentDTO.DoctorId);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.PatientId == appointmentDTO.PatientId);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.DoctorId == appointmentDTO.DoctorId);
 
             if (patient == null)
             {
@@ -95,8 +89,8 @@ namespace Hospital_API.Controllers
             };
 
             // Add the new appointment to the database
-            _context.Appointments.Add(appointment);
-            _context.SaveChanges();
+            await _context.Appointments.AddAsync(appointment);
+            await _context.SaveChangesAsync();
 
             // Return the created appointment as an AppointmentDTO
             return CreatedAtRoute("GetAppointment", new { patientId = appointmentDTO.PatientId, doctorId = appointmentDTO.DoctorId }, appointmentDTO);
@@ -106,46 +100,44 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeleteAppointment(int patientId, int doctorId)
+        public async Task<IActionResult> DeleteAppointmentAsync(int patientId, int doctorId)
         {
             if (patientId < 0 || doctorId < 0)
             {
                 return BadRequest();
             }
 
-            var appointment = _context.Appointments.FirstOrDefault(a => a.PatientId == patientId && a.DoctorId == doctorId);
+            var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
             if (appointment == null)
             {
                 return NotFound();
             }
 
             _context.Appointments.Remove(appointment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
-
-       
 
         [HttpPut("{patientId},{doctorId}", Name = "UpdateAppointment")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateAppointment(int patientId, int doctorId, [FromBody] AppointmentDTO appointmentDTO)
+        public async Task<IActionResult> UpdateAppointmentAsync(int patientId, int doctorId, [FromBody] AppointmentDTO appointmentDTO)
         {
             if (appointmentDTO == null || patientId != appointmentDTO.PatientId || doctorId != appointmentDTO.DoctorId)
             {
                 return BadRequest();
             }
 
-            var appointment = _context.Appointments.FirstOrDefault(a => a.PatientId == patientId && a.DoctorId == doctorId);
+            var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
             if (appointment == null)
             {
                 return NotFound();
             }
 
             // Fetch the Patient and Doctor entities
-            var patient = _context.Patients.FirstOrDefault(p => p.PatientId == appointmentDTO.PatientId);
-            var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorId == appointmentDTO.DoctorId);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.PatientId == appointmentDTO.PatientId);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.DoctorId == appointmentDTO.DoctorId);
 
             if (patient == null)
             {
@@ -164,7 +156,7 @@ namespace Hospital_API.Controllers
             appointment.Doctor = doctor;
 
             _context.Appointments.Update(appointment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

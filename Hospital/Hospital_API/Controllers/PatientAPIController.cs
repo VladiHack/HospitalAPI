@@ -1,38 +1,38 @@
 ﻿using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
     [Route("api/PatientAPI")]
     [ApiController]
-    public class PatientAPIController:ControllerBase
+    public class PatientAPIController : ControllerBase
     {
         private readonly HospitalDbContext _context;
+
         public PatientAPIController(HospitalDbContext context)
         {
             _context = context;
         }
 
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Patient>> GetPatients()
+        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsAsync()
         {
-            return Ok(_context.Patients.ToList());
+            return Ok(await _context.Patients.ToListAsync());
         }
 
         [HttpGet("{id:int}", Name = "GetPatient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<Patient> GetPatient(int id)
+        public async Task<ActionResult<Patient>> GetPatientAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var patient = _context.Patients.FirstOrDefault(u => u.PatientId == id);
+            var patient = await _context.Patients.FirstOrDefaultAsync(u => u.PatientId == id);
             if (patient == null)
             {
                 return NotFound();
@@ -44,10 +44,9 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Patient> CreatePatient([FromBody] PatientDTO patientDTO)
+        public async Task<ActionResult<Patient>> CreatePatientAsync([FromBody] PatientDTO patientDTO)
         {
-            if (_context.Patients.FirstOrDefault(u => u.PatientFirstName.ToLower() == patientDTO.FirstName.ToLower() && u.PatientLastName.ToLower() == patientDTO.LastName.ToLower()) != null)
+            if (await _context.Patients.FirstOrDefaultAsync(u => u.PatientFirstName.ToLower() == patientDTO.FirstName.ToLower() && u.PatientLastName.ToLower() == patientDTO.LastName.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Patient already exists!");
                 return BadRequest(ModelState);
@@ -61,15 +60,16 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Patient patient = new Patient();
-
-            patient.PatientFirstName = patientDTO.FirstName;
-            patient.PatientLastName = patientDTO.LastName;
-            patient.PatientAddress = patientDTO.Address;
-            patient.PatientPhoneNumber = patientDTO.PhoneNumber;
+            Patient patient = new Patient
+            {
+                PatientFirstName = patientDTO.FirstName,
+                PatientLastName = patientDTO.LastName,
+                PatientAddress = patientDTO.Address,
+                PatientPhoneNumber = patientDTO.PhoneNumber
+            };
 
             _context.Patients.Add(patient);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return CreatedAtRoute("GetPatient", new { id = patientDTO.Id }, patientDTO);
         }
 
@@ -77,41 +77,42 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id:int}", Name = "DeletePatient")]
-
-        public ActionResult DeletePatient(int id)
+        public async Task<ActionResult> DeletePatientAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var patient = _context.Patients.FirstOrDefault(u => u.PatientId == id);
-            if (patient == null) return NotFound();
+            var patient = await _context.Patients.FirstOrDefaultAsync(u => u.PatientId == id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
 
-            //Delete all appointments of the patient
-            List<Appointment> appointments = _context.Appointments.Where(u=>u.PatientId == id).ToList();
+            // Delete all appointments of the patient
+            List<Appointment> appointments = await _context.Appointments.Where(u => u.PatientId == id).ToListAsync();
             foreach (Appointment appointment in appointments)
             {
                 _context.Appointments.Remove(appointment);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             _context.Patients.Remove(patient);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPut("{id:int}", Name = "UpdatePatient")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public IActionResult UpdatePatient(int id, [FromBody] PatientDTO patientDTO)
+        public async Task<IActionResult> UpdatePatientAsync(int id, [FromBody] PatientDTO patientDTO)
         {
             if (patientDTO == null || id != patientDTO.Id)
             {
                 return BadRequest();
             }
 
-            Patient patient = _context.Patients.FirstOrDefault(u => u.PatientId == id);
+            Patient patient = await _context.Patients.FirstOrDefaultAsync(u => u.PatientId == id);
 
             patient.PatientFirstName = patientDTO.FirstName;
             patient.PatientLastName = patientDTO.LastName;
@@ -119,12 +120,8 @@ namespace Hospital_API.Controllers
             patient.PatientPhoneNumber = patientDTO.PhoneNumber;
 
             _context.Patients.Update(patient);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
-
-               
-
     }
 }
-

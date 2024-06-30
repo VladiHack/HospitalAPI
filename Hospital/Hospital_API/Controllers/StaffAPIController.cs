@@ -1,14 +1,15 @@
 ﻿using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
     [Route("api/StaffAPI")]
     [ApiController]
-    public class StaffAPIController:ControllerBase
+    public class StaffAPIController : ControllerBase
     {
-
         private readonly HospitalDbContext _context;
+
         public StaffAPIController(HospitalDbContext context)
         {
             _context = context;
@@ -16,24 +17,22 @@ namespace Hospital_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Staff>> GetStaffMembers()
+        public async Task<ActionResult<IEnumerable<Staff>>> GetStaffMembersAsync()
         {
-            return Ok(_context.Staff.ToList());
+            return Ok(await _context.Staff.ToListAsync());
         }
-
 
         [HttpGet("{id:int}", Name = "GetStaffMember")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<Staff> GetStaffMember(int id)
+        public async Task<ActionResult<Staff>> GetStaffMemberAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var staffMember = _context.Staff.FirstOrDefault(u => u.StaffId == id);
+            var staffMember = await _context.Staff.FirstOrDefaultAsync(u => u.StaffId == id);
             if (staffMember == null)
             {
                 return NotFound();
@@ -45,10 +44,9 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Staff> CreateStaff([FromBody] StaffDTO staffDTO)
+        public async Task<ActionResult<Staff>> CreateStaffAsync([FromBody] StaffDTO staffDTO)
         {
-            if (_context.Staff.FirstOrDefault(u => u.StaffFirstName.ToLower() == staffDTO.FirstName.ToLower() && u.StaffLastName.ToLower() == staffDTO.LastName.ToLower()) != null)
+            if (await _context.Staff.FirstOrDefaultAsync(u => u.StaffFirstName.ToLower() == staffDTO.FirstName.ToLower() && u.StaffLastName.ToLower() == staffDTO.LastName.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Staff member already exists!");
                 return BadRequest(ModelState);
@@ -62,16 +60,17 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Staff staffMember = new Staff();
-
-            staffMember.StaffFirstName = staffDTO.FirstName;
-            staffMember.StaffLastName = staffDTO.LastName;
-            staffMember.DepartmentId = staffDTO.DepartmentId;
-            staffMember.StaffPhoneNumber = staffDTO.PhoneNumber;
-            staffMember.StaffAddress = staffDTO.Address;
+            Staff staffMember = new Staff
+            {
+                StaffFirstName = staffDTO.FirstName,
+                StaffLastName = staffDTO.LastName,
+                DepartmentId = staffDTO.DepartmentId,
+                StaffPhoneNumber = staffDTO.PhoneNumber,
+                StaffAddress = staffDTO.Address
+            };
 
             _context.Staff.Add(staffMember);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return CreatedAtRoute("GetStaffMember", new { id = staffDTO.Id }, staffDTO);
         }
 
@@ -79,33 +78,38 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id:int}", Name = "DeleteStaffMember")]
-
-        public ActionResult DeleteStaffMember(int id)
+        public async Task<ActionResult> DeleteStaffMemberAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var staffMember = _context.Staff.FirstOrDefault(u => u.StaffId == id);
-            if (staffMember == null) return NotFound();
+            var staffMember = await _context.Staff.FirstOrDefaultAsync(u => u.StaffId == id);
+            if (staffMember == null)
+            {
+                return NotFound();
+            }
 
             _context.Staff.Remove(staffMember);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPut("{id:int}", Name = "UpdateStaffMember")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public IActionResult UpdateStaffMember(int id, [FromBody] StaffDTO staffDTO)
+        public async Task<IActionResult> UpdateStaffMemberAsync(int id, [FromBody] StaffDTO staffDTO)
         {
             if (staffDTO == null || id != staffDTO.Id)
             {
                 return BadRequest();
             }
 
-            Staff staffMember = _context.Staff.FirstOrDefault(u => u.StaffId == id);
+            var staffMember = await _context.Staff.FirstOrDefaultAsync(u => u.StaffId == id);
+            if (staffMember == null)
+            {
+                return NotFound();
+            }
 
             staffMember.StaffFirstName = staffDTO.FirstName;
             staffMember.StaffLastName = staffDTO.LastName;
@@ -114,7 +118,7 @@ namespace Hospital_API.Controllers
             staffMember.StaffAddress = staffDTO.Address;
 
             _context.Staff.Update(staffMember);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

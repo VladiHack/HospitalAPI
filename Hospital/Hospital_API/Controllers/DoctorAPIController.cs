@@ -1,13 +1,14 @@
 ﻿using Hospital_API.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Controllers
 {
     [Route("api/DoctorAPI")]
     [ApiController]
-    public class DoctorAPIController:ControllerBase
+    public class DoctorAPIController : ControllerBase
     {
-        public HospitalDbContext _context;
+        private readonly HospitalDbContext _context;
 
         public DoctorAPIController(HospitalDbContext context)
         {
@@ -16,24 +17,22 @@ namespace Hospital_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Doctor>> GetDoctors()
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorsAsync()
         {
-            return Ok(_context.Doctors.ToList());
+            return Ok(await _context.Doctors.ToListAsync());
         }
-
 
         [HttpGet("{id:int}", Name = "GetDoctor")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<Doctor> GetDoctor(int id)
+        public async Task<ActionResult<Doctor>> GetDoctorAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var doctor = _context.Doctors.FirstOrDefault(u => u.DoctorId == id);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(u => u.DoctorId == id);
             if (doctor == null)
             {
                 return NotFound();
@@ -45,10 +44,9 @@ namespace Hospital_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Doctor> CreateDoctor([FromBody] DoctorDTO doctorDTO)
+        public async Task<ActionResult<Doctor>> CreateDoctorAsync([FromBody] DoctorDTO doctorDTO)
         {
-            if (_context.Doctors.FirstOrDefault(u => u.DoctorFirstName.ToLower() == doctorDTO.FirstName.ToLower() && u.DoctorLastName.ToLower()==doctorDTO.LastName.ToLower())!= null)
+            if (await _context.Doctors.FirstOrDefaultAsync(u => u.DoctorFirstName.ToLower() == doctorDTO.FirstName.ToLower() && u.DoctorLastName.ToLower() == doctorDTO.LastName.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Doctor already exists!");
                 return BadRequest(ModelState);
@@ -62,57 +60,59 @@ namespace Hospital_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            Doctor doctor = new Doctor();
-
-            doctor.DoctorFirstName = doctorDTO.FirstName;
-            doctor.DoctorLastName = doctorDTO.LastName;
-            doctor.DepartmentId = doctorDTO.DepartmentId;
-            doctor.DoctorPhoneNumber=doctorDTO.PhoneNumber;
+            Doctor doctor = new Doctor
+            {
+                DoctorFirstName = doctorDTO.FirstName,
+                DoctorLastName = doctorDTO.LastName,
+                DepartmentId = doctorDTO.DepartmentId,
+                DoctorPhoneNumber = doctorDTO.PhoneNumber
+            };
 
             _context.Doctors.Add(doctor);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return CreatedAtRoute("GetDoctor", new { id = doctorDTO.Id }, doctorDTO);
         }
 
+        [HttpDelete("{id:int}", Name = "DeleteDoctor")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id:int}", Name = "DeleteDoctor")]
-
-        public ActionResult DeleteDoctor(int id)
+        public async Task<ActionResult> DeleteDoctorAsync(int id)
         {
             if (id < 0)
             {
                 return BadRequest();
             }
-            var doctor = _context.Doctors.FirstOrDefault(u => u.DoctorId == id);
-            if (doctor == null) return NotFound();
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(u => u.DoctorId == id);
+            if (doctor == null)
+            {
+                return NotFound();
+            }
 
-            //Delete all appointments of the doctor
-            List<Appointment> appointments=_context.Appointments.Where(u=>u.DoctorId==id).ToList();
+            // Delete all appointments of the doctor
+            List<Appointment> appointments = await _context.Appointments.Where(u => u.DoctorId == id).ToListAsync();
             foreach (Appointment appointment in appointments)
             {
                 _context.Appointments.Remove(appointment);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             _context.Doctors.Remove(doctor);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPut("{id:int}", Name = "UpdateDoctor")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public IActionResult UpdateDoctor(int id, [FromBody] DoctorDTO doctorDTO)
+        public async Task<IActionResult> UpdateDoctorAsync(int id, [FromBody] DoctorDTO doctorDTO)
         {
             if (doctorDTO == null || id != doctorDTO.Id)
             {
                 return BadRequest();
             }
 
-            Doctor doctor = _context.Doctors.FirstOrDefault(u => u.DoctorId == id);
+            Doctor doctor = await _context.Doctors.FirstOrDefaultAsync(u => u.DoctorId == id);
 
             doctor.DoctorFirstName = doctorDTO.FirstName;
             doctor.DoctorLastName = doctorDTO.LastName;
@@ -120,11 +120,8 @@ namespace Hospital_API.Controllers
             doctor.DoctorPhoneNumber = doctorDTO.PhoneNumber;
 
             _context.Doctors.Update(doctor);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
-
-        
     }
 }
-
