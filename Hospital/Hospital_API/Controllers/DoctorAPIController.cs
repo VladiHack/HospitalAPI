@@ -88,6 +88,14 @@ namespace Hospital_API.Controllers
             var doctor = _context.Doctors.FirstOrDefault(u => u.DoctorId == id);
             if (doctor == null) return NotFound();
 
+            //Delete all appointments of the doctor
+            List<Appointment> appointments=_context.Appointments.Where(u=>u.DoctorId==id).ToList();
+            foreach (Appointment appointment in appointments)
+            {
+                _context.Appointments.Remove(appointment);
+                _context.SaveChanges();
+            }
+
             _context.Doctors.Remove(doctor);
             _context.SaveChanges();
             return NoContent();

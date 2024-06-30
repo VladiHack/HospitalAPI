@@ -95,7 +95,28 @@ namespace Hospital_API.Controllers
             List<Department> departments = _context.Departments.Where(u=>u.HospitalId==id).ToList();
             foreach (var department in departments)
             {
-                //Delete more stuff which is connected
+                //Delete all doctors and staff in this department
+                List<Doctor> doctors=_context.Doctors.Where(u=>u.DepartmentId==department.DepartmentId).ToList();
+                foreach(Doctor doctor in doctors)
+                {
+                    //Delete all appointments of the doctor
+                    List<Appointment> appointments = _context.Appointments.Where(a => a.DoctorId == doctor.DoctorId).ToList();
+                    foreach(Appointment appointment in appointments)
+                    {
+                        _context.Appointments.Remove(appointment);
+                        _context.SaveChanges();
+                    }
+
+                    _context.Doctors.Remove(doctor);
+                    _context.SaveChanges();
+                }
+
+                List<Staff> staff = _context.Staff.Where(u => u.DepartmentId == department.DepartmentId).ToList();
+                foreach(Staff staffMember in staff)
+                {
+                    _context.Staff.Remove(staffMember);
+                    _context.SaveChanges();
+                }
 
                 _context.Departments.Remove(department);
                 _context.SaveChanges();
